@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#091b17">
+<title>:3 on Supra — pocket cat device</title>
+<meta name="description" content="The pocket-sized home of :3 on Supra. Tap the keys, chat with the buddies, connect your StarKey wallet.">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#091b17; --bg2:#0f2a23; --plastic:#d9cfb8; --plastic-d:#b9ad92; --screen:#0b2a22;
+  --mint:#7ff0c8; --ginger:#f0a35a; --pink:#ff9fb8; --ink:#14201c; --txt:#d8f5ea;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  background:radial-gradient(900px 500px at 50% -10%,#143a30,var(--bg));
+  color:var(--txt);font-family:"Fredoka",system-ui,sans-serif;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  padding:max(16px,env(safe-area-inset-top)) 14px max(24px,env(safe-area-inset-bottom));
+}
+header{width:100%;max-width:440px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-weight:700;font-size:20px;letter-spacing:.2px}
+.brand small{font-weight:500;color:var(--mint);margin-left:6px;font-size:13px}
+button{font-family:inherit;cursor:pointer}
+.wallet{background:transparent;border:2px solid var(--mint);color:var(--mint);border-radius:999px;padding:7px 14px;font-weight:600;font-size:13px}
+.wallet:hover{background:var(--mint);color:var(--bg)}
+.wallet.on{background:var(--mint);color:var(--bg)}
+:focus-visible{outline:3px solid var(--ginger);outline-offset:2px}
+
+/* device */
+.device{
+  width:100%;max-width:440px;background:linear-gradient(160deg,#e6dcc4,var(--plastic) 40%,var(--plastic-d));
+  border-radius:38px 38px 54px 54px;padding:22px 20px 26px;
+  box-shadow:0 2px 0 #fff6 inset,0 -8px 0 #0002 inset,0 30px 60px #000a;
+  color:var(--ink);
+}
+.bezel{background:#1b1f1d;border-radius:22px;padding:14px;box-shadow:0 4px 12px #0008 inset}
+.screen{background:var(--screen);border-radius:12px;overflow:hidden;position:relative;min-height:330px;display:flex;flex-direction:column;
+  box-shadow:0 0 40px #7ff0c822 inset}
+.screen::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,#0000 0 2px,#0003 2px 3px)}
+.bar{display:flex;justify-content:space-between;padding:8px 12px;font-size:12px;color:var(--mint);border-bottom:1px solid #7ff0c833}
+.hero{padding:14px 14px 8px;display:flex;gap:12px;align-items:center}
+.hero svg{flex:0 0 96px;width:96px;height:auto}
+.hero h1{font-size:25px;line-height:1.05;color:#fff}
+.hero p{font-size:14px;margin-top:6px;color:var(--mint)}
+.tag{padding:0 14px 8px;font-size:12px;color:var(--ginger);font-weight:600}
+
+/* messenger */
+.msn{margin:4px 10px 12px;border:2px solid #7ff0c855;border-radius:10px;background:#071a15;display:flex;flex-direction:column;flex:1;min-height:170px}
+.tabs{display:flex;border-bottom:2px solid #7ff0c833}
+.tabs button{flex:1;background:none;border:0;color:#8fb8aa;padding:7px 4px;font-size:13px;font-weight:500}
+.tabs button[aria-selected=true]{color:var(--bg);background:var(--mint);font-weight:700}
+.pane{padding:8px 10px;overflow:auto;max-height:200px;font-size:14px;flex:1}
+.msg{margin-bottom:7px;line-height:1.3;white-space:pre-wrap;word-break:break-word}
+.msg b{color:var(--ginger);margin-right:6px}
+.msg.me b{color:var(--pink)}
+.buddy{display:flex;align-items:center;gap:8px;padding:5px 0}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px var(--mint)}
+.dot.away{background:var(--ginger);box-shadow:0 0 6px var(--ginger)}
+.pane a{display:block;color:var(--mint);padding:5px 0;text-decoration:none;border-bottom:1px dashed #7ff0c833}
+.pane a:hover{color:#fff}
+.compose{display:flex;border-top:2px solid #7ff0c833}
+.compose output{flex:1;padding:8px 10px;font-size:14px;color:#fff;min-height:36px;max-height:76px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.compose output::after{content:"▮";color:var(--mint);animation:blink 1s steps(2) infinite}
+.compose button{background:var(--mint);color:var(--bg);border:0;padding:0 16px;font-weight:700}
+@keyframes blink{50%{opacity:0}}
+
+/* controls */
+.controls{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:0 6px}
+.dpad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,38px);gap:3px}
+.dpad button{background:#2a2f2c;color:#cfd8d3;border:0;border-radius:8px;font-size:13px;box-shadow:0 3px 0 #0008}
+.dpad button:active{transform:translateY(2px);box-shadow:0 1px 0 #0008}
+.dpad .u{grid-area:1/2}.dpad .l{grid-area:2/1}.dpad .r{grid-area:2/3}.dpad .d{grid-area:3/2}
+.status{font-size:13px;font-weight:600;color:#4b4638;text-align:center}
+.status i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2fbf8f;margin-right:5px}
+.big{width:74px;height:74px;border-radius:50%;border:0;background:var(--ginger);color:var(--ink);font-size:28px;font-weight:700;
+  box-shadow:0 6px 0 #a8672a,0 10px 14px #0005}
+.big:active{transform:translateY(4px);box-shadow:0 2px 0 #a8672a}
+
+/* keyboard */
+.kb{width:100%;max-width:440px;background:var(--bg2);border:2px solid #7ff0c833;border-radius:20px;padding:12px}
+.kb h2{font-size:14px;color:var(--mint);margin-bottom:8px;font-weight:500}
+.row{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
+.key{flex:1;max-width:38px;height:42px;border-radius:8px;border:0;background:#1d4a3d;color:var(--txt);font-size:16px;font-weight:600;box-shadow:0 3px 0 #0b241d}
+.key:active{transform:translateY(2px);box-shadow:0 1px 0 #0b241d;background:var(--mint);color:var(--bg)}
+.key.wide{max-width:none;flex:2}.key.space{max-width:none;flex:5}
+.key.cat{background:var(--ginger);color:var(--ink);max-width:none;flex:2}
+.prefs{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#9cc7b9}
+.prefs label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.prefs input{accent-color:var(--mint);width:16px;height:16px}
+footer{font-size:12px;color:#6f9a8c;text-align:center}
+.swapcard{border:2px solid var(--ginger);border-radius:10px;padding:9px 10px;margin-bottom:8px;background:#102f27;font-size:13px;line-height:1.35}
+.swapcard strong{display:block;color:var(--ginger);margin-bottom:3px;font-size:14px}
+.swapcard a{display:inline-block;margin:6px 6px 0 0;background:var(--ginger);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:700;text-decoration:none}
+.flag{margin-top:3px}.flag.high{color:var(--bad)}.flag.medium{color:var(--ginger)}.flag.info{color:#9cc7b9}
+.kv{display:flex;justify-content:space-between;gap:10px;margin:2px 0}.kv span:last-child{text-align:right;word-break:break-all}
+@media (prefers-reduced-motion:reduce){.compose output::after{animation:none}}
+@media (max-width:380px){.key{height:38px;font-size:14px}.hero svg{flex-basis:76px;width:76px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">:3<small>on Supra</small></div>
+  <button class="wallet" id="walletBtn" type="button">Connect StarKey</button>
+</header>
+
+<main class="device" aria-label=":3 pocket device">
+  <div class="bezel">
+    <div class="screen">
+      <div class="bar"><span>↶ :3 / <span id="net">ONLINE</span></span><span id="clock">--:--</span></div>
+      <div class="hero">
+        <svg viewBox="0 0 100 92" role="img" aria-label="Cartoon cat face with a :3 mouth">
+          <path d="M14 38 L20 6 L42 24 Z M86 38 L80 6 L58 24 Z" fill="#f0a35a" stroke="#14201c" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M22 28 L24 14 L34 24Z M78 28 L76 14 L66 24Z" fill="#ff9fb8"/>
+          <ellipse cx="50" cy="54" rx="40" ry="34" fill="#f6c58f" stroke="#14201c" stroke-width="3"/>
+          <ellipse cx="34" cy="50" rx="7" ry="9" fill="#14201c"/><ellipse cx="66" cy="50" rx="7" ry="9" fill="#14201c"/>
+          <circle cx="36" cy="46" r="2.6" fill="#fff"/><circle cx="68" cy="46" r="2.6" fill="#fff"/>
+          <path d="M45 61 Q50 57 55 61 Q50 67 45 61Z" fill="#ff7fa0" stroke="#14201c" stroke-width="2"/>
+          <path d="M50 64 Q44 74 38 68 M50 64 Q56 74 62 68" fill="none" stroke="#14201c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M14 58 H4 M14 64 L5 69 M86 58 H96 M86 64 L95 69" stroke="#14201c" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>the home of :3</h1>
+          <p>your new emotional support device.</p>
+        </div>
+      </div>
+      <div class="tag">NO DATA PLAN. JUST CAT ENERGY.</div>
+
+      <section class="msn" aria-label="Messenger">
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="chat">✉ chat</button>
+          <button role="tab" aria-selected="false" data-tab="buddies">buddies</button>
+          <button role="tab" aria-selected="false" data-tab="links">links</button>
+        </div>
+        <div class="pane" id="pane" aria-live="polite"></div>
+        <form class="compose" id="form" autocomplete="off">
+          <output id="draft" aria-label="Message draft"></output>
+          <button type="submit">send :3</button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="dpad" aria-label="Scroll controls">
+      <button class="u" type="button" data-scroll="-40" aria-label="Scroll up">▲</button>
+      <button class="l" type="button" data-tab-step="-1" aria-label="Previous tab">◀</button>
+      <button class="r" type="button" data-tab-step="1" aria-label="Next tab">▶</button>
+      <button class="d" type="button" data-scroll="40" aria-label="Scroll down">▼</button>
+    </div>
+    <div class="status"><i></i>:3 / ONLINE<br>connected by :3</div>
+    <button class="big" id="meow" type="button" aria-label="Send :3">:3</button>
+  </div>
+</main>
+
+<section class="kb" aria-label="On-screen keyboard">
+  <h2>tap the keys. :3</h2>
+  <div id="keys"></div>
+  <div class="prefs">
+    <label><input type="checkbox" id="snd" checked> click sound</label>
+    <label><input type="checkbox" id="vib" checked> vibration</label>
+  </div>
+</section>
+
+<footer>:3 on Supra · fan-made, not financial advice</footer>
+
+<script>
+/* ======= CONFIG: palitan mo ito ======= */
+const CONFIG = {
+  // LLM chat: ilalagay pagkatapos ma-deploy ang `cat-chat` edge function.
+  // Kapag walang laman, random na sagot lang ang gagamitin ng mga buddy.
+  chatUrl: "https://aaunnfngtikjmqgkxmnu.supabase.co/functions/v1/cat-chat",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhdW5uZm5ndGlram1xZ2t4bW51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwODM3NTUsImV4cCI6MjExMDY1OTc1NX0.ILYiboCg6ykfbgJlsFcyuiGjy28TgPGMFW31b833vkk",
+  // DEXs shown on the swap card. Verify each URL is the official one before you publish.
+  // Empty url = shown as "link not set". Only https links are used.
+  dexes: [
+    { name: "Dexlyn", url: "" },                          // paste the official Dexlyn swap page here
+    { name: "Supwars DEX", url: "https://dex.supwars.fun" } // found via a DefiLlama listing; confirm it is the official site
+  ],
+  links: [
+    ["Buy :3 on Supra", "#"],   // ilagay ang DEX/launchpad link mo
+    ["X / Twitter", "#"],
+    ["Telegram", "#"],
+    ["Explorer (SupraScan)", "https://suprascan.io"]
+  ]
+};
+/* ===================================== */
+
+const buddies=[["silly_little_guy","on"],["head_empty","on"],["nap_enjoyer","away"],["keyboard_cat","on"],["no_thoughts","away"]];
+const replies=["hai :3","no thoughts. just :3","mrrp","gm :3","wen nap","supra cat energy :3","tap tap tap","uwu"];
+const log=[["silly_little_guy","hai :3"],["head_empty","no thoughts. just :3"]];
+let tab="chat",draft="";
+const $=s=>document.querySelector(s);
+const pane=$("#pane"),out=$("#draft");
+
+function esc(t){return t.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===tab));
+  if(tab==="chat"){
+    pane.innerHTML=log.map(([n,t])=>n==="swap"?swapCard(t):n==="analyze"?analyzeCard(t):`<div class="msg${n==="you"?" me":""}"><b>${esc(n)}</b>${esc(t)}</div>`).join("");
+    pane.scrollTop=pane.scrollHeight;
+  }else if(tab==="buddies"){
+    pane.innerHTML=buddies.map(([n,s])=>`<div class="buddy"><span class="dot ${s==="away"?"away":""}"></span>${esc(n)}</div>`).join("");
+  }else{
+    pane.innerHTML=CONFIG.links.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a>`).join("");
+  }
+  out.textContent=draft;out.scrollTop=out.scrollHeight;
+}
+
+/* sound + haptics */
+let ctx;
+function feedback(){
+  if($("#vib").checked&&navigator.vibrate)navigator.vibrate(12);
+  if(!$("#snd").checked)return;
+  try{
+    ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="square";o.frequency.value=520+Math.random()*120;
+    g.gain.value=.04;g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.06);
+    o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.06);
+  }catch(e){}
+}
+
+function type(ch){feedback();if(draft.length<500)draft+=ch;tab="chat";render()}
+function back(){feedback();draft=draft.slice(0,-1);out.textContent=draft;out.scrollTop=out.scrollHeight}
+function parseSwap(text){
+  const m=text.match(/\b(?:swap|trade|convert|exchange)\s+([0-9][0-9,]*\.?[0-9]*)\s*\$?([a-z0-9:]{1,12})\s+(?:to|for|into|->|\u2192)\s+\$?([a-z0-9:]{1,12})\b/i);
+  if(!m)return null;
+  const amount=parseFloat(m[1].replace(/,/g,""));
+  if(!(amount>0)||amount>1e9)return null;
+  return {amount,from:m[2].toUpperCase(),to:m[3].toUpperCase()};
+}
+function swapCard(o){
+  const links=CONFIG.dexes.map(d=>/^https:\/\//.test(d.url||"")
+    ?`<a href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(d.name)}</a>`
+    :`<div>${esc(d.name)}: link not set yet.</div>`).join(" ");
+  return `<div class="swapcard"><strong>Swap proposal (not executed)</strong>${esc(String(o.amount))} ${esc(o.from)} \u2192 ${esc(o.to)}<br>Pick a DEX, enter these values there, and check the quote, price impact and slippage before you confirm. Liquidity can be thin. You sign in StarKey on the DEX; this site never sends transactions.<br>${links}</div>`;
+}
+function parseAnalyze(text){
+  const m=text.match(/\b(?:analy[sz]e|check|scan|audit|inspect)\s+(?:the\s+)?(?:token\s+)?(0x[0-9a-fA-F]{1,64}(?:::[A-Za-z_][A-Za-z0-9_]*::[A-Za-z_][A-Za-z0-9_]*)?)/i);
+  return m?m[1]:null;
+}
+function fmtUnits(v,d){
+  try{
+    if(v==null)return "unknown";
+    if(d==null)return String(v);
+    const b=BigInt(v),base=10n**BigInt(d);
+    const whole=(b/base).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+    const frac=d>0?(b%base).toString().padStart(d,"0").slice(0,4).replace(/0+$/,""):"";
+    return frac?whole+"."+frac:whole;
+  }catch(e){return String(v)}
+}
+function shortTok(t){return t.length>40?t.slice(0,14)+"\u2026"+t.slice(-18):t}
+function analyzeCard(o){
+  const head='<strong>Token analysis (not advice)</strong>';
+  if(o.loading)return `<div class="swapcard">${head}Reading ${esc(shortTok(o.token))} from Supra\u2026</div>`;
+  if(o.error)return `<div class="swapcard">${head}${esc(o.error)}</div>`;
+  if(o.found===false)return `<div class="swapcard">${head}Not found on Supra mainnet. Check the address or coin type: ${esc(shortTok(o.token))}</div>`;
+  const row=(k,v)=>`<div class="kv"><span>${esc(k)}</span><span>${esc(String(v))}</span></div>`;
+  const flags=(o.flags||[]).map(f=>`<div class="flag ${esc(f.level)}">\u2022 ${esc(f.text)}</div>`).join("");
+  return `<div class="swapcard">${head}`
+    +row("Name",`${o.name??"?"} (${o.symbol??"?"})`)
+    +row("Type",o.kind==="coin"?"Move coin":"Fungible asset")
+    +row("Decimals",o.decimals??"unknown")
+    +row("Total supply",fmtUnits(o.supply,o.decimals))
+    +row("Creator / owner",o.creator?shortTok(o.creator):"unknown")
+    +row("Creator holds",o.creatorSharePct==null?"unknown":o.creatorSharePct+"%")
+    +row("Code upgrades",o.upgradePolicy==="immutable"?"locked":o.upgradePolicy==="upgradable"?"still possible":"unknown")
+    +flags
+    +`<div class="flag info">These are facts read from the chain, not a safety guarantee. Never treat this as financial advice.</div></div>`;
+}
+async function runAnalyze(token){
+  const entry={loading:true,token};
+  log.push(["analyze",entry]);render();
+  if(!CONFIG.chatUrl||!CONFIG.anonKey){entry.loading=false;entry.error="Token analysis is not configured on this site.";render();return}
+  try{
+    const r=await fetch(CONFIG.chatUrl.replace(/cat-chat$/,"token-info"),{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+CONFIG.anonKey,"apikey":CONFIG.anonKey},
+      body:JSON.stringify({token})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){
+      const msg={rate_limited:"Too many requests. Wait a minute and try again.",
+        bad_token_format:"Use a coin type like 0x...::module::Name, or a fungible asset address starting with 0x.",
+        rpc_error:"The Supra node did not answer. Try again in a moment."}[d.error];
+      throw new Error(msg||"Analysis failed ("+r.status+").");
+    }
+    Object.assign(entry,d,{loading:false});
+  }catch(e){
+    console.warn("token-info failed:",e);
+    entry.loading=false;entry.error=e.message||"Analysis failed.";
+  }
+  render();
+}
+const BOT="silly_little_guy";
+let busy=false;
+function pushBot(who,t){
+  log.push([who,t]);
+  if(log.length>40)log.splice(0,log.length-40);
+  if(tab==="chat")render();
+}
+function randomReply(){
+  const who=buddies[Math.floor(Math.random()*buddies.length)][0];
+  setTimeout(()=>pushBot(who,replies[Math.floor(Math.random()*replies.length)]),700+Math.random()*700);
+}
+async function askCat(){
+  // history para sa LLM: ang mga "you" ay user, ang mga buddy ay assistant
+  const history=log.filter(([n])=>n!=="system"&&n!=="typing"&&n!=="swap"&&n!=="analyze")
+    .slice(-6).map(([n,t])=>({role:n==="you"?"user":"assistant",content:t}));
+  busy=true;
+  log.push(["typing","..."]);render();
+  const drop=()=>{const i=log.findIndex(m=>m[0]==="typing");if(i>-1)log.splice(i,1)};
+  try{
+    const r=await fetch(CONFIG.chatUrl,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+CONFIG.anonKey,"apikey":CONFIG.anonKey},
+      body:JSON.stringify({messages:history})
+    });
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    drop();
+    pushBot(BOT,String(d.reply||"mrrp :3").slice(0,1500));
+  }catch(e){
+    console.warn("cat-chat failed, using random reply:",e);
+    drop();render();randomReply();
+  }finally{busy=false}
+}
+function send(text){
+  text=(text??draft).trim();if(!text)return;
+  const canned=text===":3";                 // ang :3 button ay hindi na tumatawag sa LLM
+  if(busy&&!canned)return;
+  log.push(["you",text]);draft="";tab="chat";render();
+  const sw=parseSwap(text);
+  if(sw){log.push(["swap",sw]);render();return}
+  const an=parseAnalyze(text);
+  if(an){runAnalyze(an);return}
+  if(canned||!CONFIG.chatUrl||!CONFIG.anonKey)randomReply();
+  else askCat();
+}
+
+/* keyboard */
+const rows=["qwertyuiop","asdfghjkl","zxcvbnm"];
+const kb=$("#keys");
+rows.forEach((r,i)=>{
+  const d=document.createElement("div");d.className="row";
+  [...r].forEach(c=>{const b=document.createElement("button");b.type="button";b.className="key";b.textContent=c;b.onclick=()=>type(c);d.appendChild(b)});
+  if(i===2){const b=document.createElement("button");b.type="button";b.className="key wide";b.textContent="⌫";b.setAttribute("aria-label","Backspace");b.onclick=back;d.appendChild(b)}
+  kb.appendChild(d);
+});
+const last=document.createElement("div");last.className="row";
+[[":3","key cat",()=>type(":3")],["space","key space",()=>type(" ")],["send","key wide",()=>{feedback();send()}]].forEach(([t,c,f])=>{
+  const b=document.createElement("button");b.type="button";b.className=c;b.textContent=t;b.onclick=f;last.appendChild(b)});
+kb.appendChild(last);
+
+/* physical keyboard */
+addEventListener("keydown",e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|TEXTAREA|BUTTON)$/.test(document.activeElement.tagName)&&e.key!=="Enter"&&e.key!==" "&&e.key.length>1)return;
+  if(document.activeElement.tagName==="BUTTON")return;
+  if(e.key==="Backspace")back();
+  else if(e.key==="Enter"){e.preventDefault();send()}
+  else if(e.key.length===1)type(e.key);
+});
+
+/* ui wiring */
+$("#form").onsubmit=e=>{e.preventDefault();send()};
+$("#meow").onclick=()=>{feedback();send(":3")};
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});
+const order=["chat","buddies","links"];
+document.querySelectorAll("[data-tab-step]").forEach(b=>b.onclick=()=>{feedback();tab=order[(order.indexOf(tab)+ +b.dataset.tabStep+3)%3];render()});
+document.querySelectorAll("[data-scroll]").forEach(b=>b.onclick=()=>{feedback();pane.scrollBy({top:+b.dataset.scroll,behavior:"smooth"})});
+
+/* clock */
+function tick(){const d=new Date();$("#clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
+tick();setInterval(tick,15000);
+
+/* Supra wallet (StarKey) */
+const wbtn=$("#walletBtn");let account=null;
+const short=a=>a.slice(0,6)+"…"+a.slice(-4);
+async function connect(){
+  if(account){
+    try{await window.starkey?.supra?.disconnect()}catch(e){}
+    account=null;wbtn.textContent="Connect StarKey";wbtn.classList.remove("on");
+    log.push(["system","wallet disconnected"]);render();return;
+  }
+  const p=window.starkey&&window.starkey.supra;
+  if(!p){
+    log.push(["system","StarKey wallet not found. Install it, then try again."]);tab="chat";render();
+    window.open("https://starkey.app","_blank","noopener");return;
+  }
+  try{
+    let res=await p.connect();
+    let a=Array.isArray(res)?res[0]:(res&&res.address)||null;
+    if(!a){const acc=await p.account();a=Array.isArray(acc)?(acc[0]?.address||acc[0]):acc?.address}
+    if(!a)throw new Error("no account");
+    account=String(a);wbtn.textContent=short(account);wbtn.classList.add("on");
+    log.push(["system","connected "+short(account)+" :3"]);tab="chat";render();
+  }catch(e){
+    log.push(["system","connection cancelled or failed"]);tab="chat";render();
+  }
+}
+wbtn.onclick=connect;
+
+render();
+</script>
+</body>
+</html>
