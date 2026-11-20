@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#091b17">
-<title>:3 on Supra — pocket cat device</title>
-<meta name="description" content="The pocket-sized home of :3 on Supra. Tap the keys, chat with the buddies, connect your StarKey wallet.">
+<title>paws on Supra — pocket cat device</title>
+<meta name="description" content="The pocket-sized home of paws on Supra. Tap the keys, chat with the buddies, connect your StarKey wallet.">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -106,16 +106,16 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
 <body>
 
 <header>
-  <div class="brand">:3<small>on Supra</small></div>
+  <div class="brand">paws<small>on Supra</small></div>
   <button class="wallet" id="walletBtn" type="button">Connect StarKey</button>
 </header>
 
-<main class="device" aria-label=":3 pocket device">
+<main class="device" aria-label="paws pocket device">
   <div class="bezel">
     <div class="screen">
-      <div class="bar"><span>↶ :3 / <span id="net">ONLINE</span></span><span id="clock">--:--</span></div>
+      <div class="bar"><span>↶ paws / <span id="net">ONLINE</span></span><span id="clock">--:--</span></div>
       <div class="hero">
-        <svg viewBox="0 0 100 92" role="img" aria-label="Cartoon cat face with a :3 mouth">
+        <svg viewBox="0 0 100 92" role="img" aria-label="Cartoon cat face">
           <path d="M14 38 L20 6 L42 24 Z M86 38 L80 6 L58 24 Z" fill="#f0a35a" stroke="#14201c" stroke-width="3" stroke-linejoin="round"/>
           <path d="M22 28 L24 14 L34 24Z M78 28 L76 14 L66 24Z" fill="#ff9fb8"/>
           <ellipse cx="50" cy="54" rx="40" ry="34" fill="#f6c58f" stroke="#14201c" stroke-width="3"/>
@@ -126,7 +126,7 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
           <path d="M14 58 H4 M14 64 L5 69 M86 58 H96 M86 64 L95 69" stroke="#14201c" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         <div>
-          <h1>the home of :3</h1>
+          <h1>the home of paws</h1>
           <p>your new emotional support device.</p>
         </div>
       </div>
@@ -140,8 +140,8 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
         </div>
         <div class="pane" id="pane" aria-live="polite"></div>
         <form class="compose" id="form" autocomplete="off">
-          <input id="draft" type="text" maxlength="1500" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="type or paste here :3" aria-label="Message">
-          <button type="submit">send :3</button>
+          <input id="draft" type="text" maxlength="1500" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="type or paste here 🐾" aria-label="Message">
+          <button type="submit">send 🐾</button>
         </form>
       </section>
     </div>
@@ -154,13 +154,13 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
       <button class="r" type="button" data-tab-step="1" aria-label="Next tab">▶</button>
       <button class="d" type="button" data-scroll="40" aria-label="Scroll down">▼</button>
     </div>
-    <div class="status"><i></i>:3 / ONLINE<br>connected by :3</div>
-    <button class="big" id="meow" type="button" aria-label="Send :3">:3</button>
+    <div class="status"><i></i>paws / ONLINE<br>connected by paws</div>
+    <button class="big" id="meow" type="button" aria-label="Send 🐾">🐾</button>
   </div>
 </main>
 
 <section class="kb" aria-label="On-screen keyboard">
-  <h2>tap the keys. :3</h2>
+  <h2>tap the keys. 🐾</h2>
   <div id="keys"></div>
   <div class="prefs">
     <label><input type="checkbox" id="snd" checked> click sound</label>
@@ -168,7 +168,7 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
   </div>
 </section>
 
-<footer>:3 on Supra · fan-made, not financial advice</footer>
+<footer>paws on Supra · fan-made, not financial advice</footer>
 
 <script>
 /* ======= CONFIG: palitan mo ito ======= */
@@ -184,7 +184,7 @@ const CONFIG = {
     { name: "Supwars DEX", url: "https://dex.supwars.fun" } // found via a DefiLlama listing; confirm it is the official site
   ],
   links: [
-    ["Buy :3 on Supra", "#"],   // ilagay ang DEX/launchpad link mo
+    ["Buy paws on Supra", "#"],   // ilagay ang DEX/launchpad link mo
     ["X / Twitter", "#"],
     ["Telegram", "#"],
     ["Explorer (SupraScan)", "https://suprascan.io"]
@@ -193,8 +193,8 @@ const CONFIG = {
 /* ===================================== */
 
 const buddies=[["silly_little_guy","on"],["head_empty","on"],["nap_enjoyer","away"],["keyboard_cat","on"],["no_thoughts","away"]];
-const replies=["hai :3","no thoughts. just :3","mrrp","gm :3","wen nap","supra cat energy :3","tap tap tap","uwu"];
-const log=[["silly_little_guy","hai :3"],["head_empty","no thoughts. just :3"]];
+const replies=["hai 🐾","no thoughts. just 🐾","mrrp","gm 🐾","wen nap","supra cat energy 🐾","paws up 🐾","tap tap tap","uwu"];
+const log=[["silly_little_guy","hai 🐾"],["head_empty","no thoughts. just 🐾"]];
 let tab="chat",draft="";
 const $=s=>document.querySelector(s);
 const pane=$("#pane"),out=$("#draft");
@@ -230,7 +230,7 @@ function feedback(){
 }
 
 function type(ch){feedback();if(draft.length<1500)draft+=ch;tab="chat";render()}
-function back(){feedback();draft=draft.slice(0,-1);out.value=draft}
+function back(){feedback();draft=Array.from(draft).slice(0,-1).join("");out.value=draft}
 function parseSwap(text){
   const m=text.match(/\b(?:swap|trade|convert|exchange)\s+([0-9][0-9,]*\.?[0-9]*)\s*\$?([a-z0-9:]{1,12})\s+(?:to|for|into|->|\u2192)\s+\$?([a-z0-9:]{1,12})\b/i);
   if(!m)return null;
@@ -330,7 +330,7 @@ async function askCat(){
     if(!r.ok)throw new Error(r.status);
     const d=await r.json();
     drop();
-    pushBot(BOT,String(d.reply||"mrrp :3").slice(0,8000));
+    pushBot(BOT,String(d.reply||"mrrp 🐾").slice(0,8000));
   }catch(e){
     console.warn("cat-chat failed, using random reply:",e);
     drop();render();randomReply();
@@ -338,7 +338,7 @@ async function askCat(){
 }
 function send(text){
   text=(text??draft).trim();if(!text)return;
-  const canned=text===":3";                 // ang :3 button ay hindi na tumatawag sa LLM
+  const canned=text==="🐾";                 // ang 🐾 button ay hindi na tumatawag sa LLM
   if(busy&&!canned)return;
   log.push(["you",text]);draft="";tab="chat";render();
   const sw=parseSwap(text);
@@ -359,7 +359,7 @@ rows.forEach((r,i)=>{
   kb.appendChild(d);
 });
 const last=document.createElement("div");last.className="row";
-[[":3","key cat",()=>type(":3")],[":","key",()=>type(":")],["paste","key paste",async()=>{feedback();try{const t=await navigator.clipboard.readText();if(t){draft=(draft+t).slice(0,1500);tab="chat";render()}}catch(e){log.push(["system","paste blocked. Long-press the message box and choose Paste."]);tab="chat";render()}}],["space","key space",()=>type(" ")],["send","key wide",()=>{feedback();send()}]].forEach(([t,c,f])=>{
+[["🐾","key cat",()=>type("🐾")],[":","key",()=>type(":")],["paste","key paste",async()=>{feedback();try{const t=await navigator.clipboard.readText();if(t){draft=(draft+t).slice(0,1500);tab="chat";render()}}catch(e){log.push(["system","paste blocked. Long-press the message box and choose Paste."]);tab="chat";render()}}],["space","key space",()=>type(" ")],["send","key wide",()=>{feedback();send()}]].forEach(([t,c,f])=>{
   const b=document.createElement("button");b.type="button";b.className=c;b.textContent=t;b.onclick=f;last.appendChild(b)});
 kb.appendChild(last);
 
@@ -375,7 +375,7 @@ addEventListener("keydown",e=>{
 
 /* ui wiring */
 $("#form").onsubmit=e=>{e.preventDefault();send()};
-$("#meow").onclick=()=>{feedback();send(":3")};
+$("#meow").onclick=()=>{feedback();send("🐾")};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});
 const order=["chat","buddies","links"];
 document.querySelectorAll("[data-tab-step]").forEach(b=>b.onclick=()=>{feedback();tab=order[(order.indexOf(tab)+ +b.dataset.tabStep+3)%3];render()});
@@ -405,7 +405,7 @@ async function connect(){
     if(!a){const acc=await p.account();a=Array.isArray(acc)?(acc[0]?.address||acc[0]):acc?.address}
     if(!a)throw new Error("no account");
     account=String(a);wbtn.textContent=short(account);wbtn.classList.add("on");
-    log.push(["system","connected "+short(account)+" :3"]);tab="chat";render();
+    log.push(["system","connected "+short(account)+" 🐾"]);tab="chat";render();
   }catch(e){
     log.push(["system","connection cancelled or failed"]);tab="chat";render();
   }
