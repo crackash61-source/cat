@@ -53,8 +53,9 @@ button{font-family:inherit;cursor:pointer}
 .tabs{display:flex;border-bottom:2px solid #7ff0c833}
 .tabs button{flex:1;background:none;border:0;color:#8fb8aa;padding:7px 4px;font-size:13px;font-weight:500}
 .tabs button[aria-selected=true]{color:var(--bg);background:var(--mint);font-weight:700}
-.pane{padding:8px 10px;overflow:auto;max-height:200px;font-size:14px;flex:1;color:var(--txt)}
+.pane{padding:8px 10px;overflow:auto;max-height:320px;font-size:14px;flex:1;color:var(--txt)}
 .msg{margin-bottom:7px;line-height:1.3;white-space:pre-wrap;word-break:break-word;color:#eafff6;opacity:1}
+.code{background:#03110d;border:1px solid #7ff0c833;border-radius:8px;padding:8px;margin:6px 0;overflow:auto;font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;color:#eafff6;word-break:normal}
 .msg.typing{color:var(--mint);opacity:.8}
 .msg b{color:var(--ginger);margin-right:6px}
 .msg.me b{color:var(--pink)}
@@ -64,8 +65,8 @@ button{font-family:inherit;cursor:pointer}
 .pane a{display:block;color:var(--mint);padding:5px 0;text-decoration:none;border-bottom:1px dashed #7ff0c833}
 .pane a:hover{color:#fff}
 .compose{display:flex;border-top:2px solid #7ff0c833}
-.compose output{flex:1;padding:8px 10px;font-size:14px;color:#fff;min-height:36px;max-height:76px;overflow:auto;white-space:pre-wrap;word-break:break-word}
-.compose output::after{content:"▮";color:var(--mint);animation:blink 1s steps(2) infinite}
+.compose input{flex:1;min-width:0;padding:8px 10px;font-family:inherit;font-size:16px;color:#fff;background:transparent;border:0;outline:0;min-height:40px;caret-color:var(--mint)}
+.compose input::placeholder{color:#6f9a8c}
 .compose button{background:var(--mint);color:var(--bg);border:0;padding:0 16px;font-weight:700}
 @keyframes blink{50%{opacity:0}}
 
@@ -88,6 +89,7 @@ button{font-family:inherit;cursor:pointer}
 .key{flex:1;max-width:38px;height:42px;border-radius:8px;border:0;background:#1d4a3d;color:var(--txt);font-size:16px;font-weight:600;box-shadow:0 3px 0 #0b241d}
 .key:active{transform:translateY(2px);box-shadow:0 1px 0 #0b241d;background:var(--mint);color:var(--bg)}
 .key.wide{max-width:none;flex:2}.key.space{max-width:none;flex:5}
+.key.paste{background:var(--pink);color:var(--ink);max-width:none;flex:2}
 .key.cat{background:var(--ginger);color:var(--ink);max-width:none;flex:2}
 .prefs{display:flex;gap:18px;margin-top:10px;font-size:13px;color:#9cc7b9}
 .prefs label{display:flex;align-items:center;gap:6px;cursor:pointer}
@@ -98,7 +100,6 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
 .swapcard a{display:inline-block;margin:6px 6px 0 0;background:var(--ginger);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:700;text-decoration:none}
 .flag{margin-top:3px}.flag.high{color:var(--bad)}.flag.medium{color:var(--ginger)}.flag.info{color:#9cc7b9}
 .kv{display:flex;justify-content:space-between;gap:10px;margin:2px 0}.kv span:last-child{text-align:right;word-break:break-all}
-@media (prefers-reduced-motion:reduce){.compose output::after{animation:none}}
 @media (max-width:380px){.key{height:38px;font-size:14px}.hero svg{flex-basis:76px;width:76px}}
 </style>
 </head>
@@ -139,7 +140,7 @@ footer{font-size:12px;color:#6f9a8c;text-align:center}
         </div>
         <div class="pane" id="pane" aria-live="polite"></div>
         <form class="compose" id="form" autocomplete="off">
-          <output id="draft" aria-label="Message draft"></output>
+          <input id="draft" type="text" maxlength="1500" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="type or paste here :3" aria-label="Message">
           <button type="submit">send :3</button>
         </form>
       </section>
@@ -197,19 +198,21 @@ const log=[["silly_little_guy","hai :3"],["head_empty","no thoughts. just :3"]];
 let tab="chat",draft="";
 const $=s=>document.querySelector(s);
 const pane=$("#pane"),out=$("#draft");
+out.addEventListener("input",()=>{draft=out.value});
 
+function fmt(t){return esc(t).split("```").map((p,i)=>i%2?`<pre class="code">${p.replace(/^[a-zA-Z0-9_+-]*\n/,"")}</pre>`:p).join("")}
 function esc(t){return t.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function render(){
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===tab));
   if(tab==="chat"){
-    pane.innerHTML=log.map(([n,t])=>n==="swap"?swapCard(t):n==="analyze"?analyzeCard(t):`<div class="msg${n==="you"?" me":n==="typing"?" typing":""}"><b>${esc(n)}</b>${esc(t)}</div>`).join("");
+    pane.innerHTML=log.map(([n,t])=>n==="swap"?swapCard(t):n==="analyze"?analyzeCard(t):`<div class="msg${n==="you"?" me":n==="typing"?" typing":""}"><b>${esc(n)}</b>${n==="you"||n==="system"?esc(t):fmt(t)}</div>`).join("");
     pane.scrollTop=pane.scrollHeight;
   }else if(tab==="buddies"){
     pane.innerHTML=buddies.map(([n,s])=>`<div class="buddy"><span class="dot ${s==="away"?"away":""}"></span>${esc(n)}</div>`).join("");
   }else{
     pane.innerHTML=CONFIG.links.map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a>`).join("");
   }
-  out.textContent=draft;out.scrollTop=out.scrollHeight;
+  if(out.value!==draft)out.value=draft;
 }
 
 /* sound + haptics */
@@ -226,8 +229,8 @@ function feedback(){
   }catch(e){}
 }
 
-function type(ch){feedback();if(draft.length<500)draft+=ch;tab="chat";render()}
-function back(){feedback();draft=draft.slice(0,-1);out.textContent=draft;out.scrollTop=out.scrollHeight}
+function type(ch){feedback();if(draft.length<1500)draft+=ch;tab="chat";render()}
+function back(){feedback();draft=draft.slice(0,-1);out.value=draft}
 function parseSwap(text){
   const m=text.match(/\b(?:swap|trade|convert|exchange)\s+([0-9][0-9,]*\.?[0-9]*)\s*\$?([a-z0-9:]{1,12})\s+(?:to|for|into|->|\u2192)\s+\$?([a-z0-9:]{1,12})\b/i);
   if(!m)return null;
@@ -243,7 +246,9 @@ function swapCard(o){
 }
 function parseAnalyze(text){
   const m=text.match(/\b(?:analy[sz]e|check|scan|audit|inspect)\s+(?:the\s+)?(?:token\s+)?(0x[0-9a-fA-F]{1,64}(?:::[A-Za-z_][A-Za-z0-9_]*::[A-Za-z_][A-Za-z0-9_]*)?)/i);
-  return m?m[1]:null;
+  if(m)return m[1];
+  const b=text.trim().match(/^(0x[0-9a-fA-F]{1,64}(?:::[A-Za-z_][A-Za-z0-9_]*::[A-Za-z_][A-Za-z0-9_]*)?)$/);
+  return b?b[1]:null;
 }
 function fmtUnits(v,d){
   try{
@@ -312,7 +317,7 @@ function randomReply(){
 async function askCat(){
   // history para sa LLM: ang mga "you" ay user, ang mga buddy ay assistant
   const history=log.filter(([n])=>n!=="system"&&n!=="typing"&&n!=="swap"&&n!=="analyze")
-    .slice(-6).map(([n,t])=>({role:n==="you"?"user":"assistant",content:t}));
+    .slice(-10).map(([n,t])=>({role:n==="you"?"user":"assistant",content:t}));
   busy=true;
   log.push(["typing","..."]);render();
   const drop=()=>{const i=log.findIndex(m=>m[0]==="typing");if(i>-1)log.splice(i,1)};
@@ -325,7 +330,7 @@ async function askCat(){
     if(!r.ok)throw new Error(r.status);
     const d=await r.json();
     drop();
-    pushBot(BOT,String(d.reply||"mrrp :3").slice(0,1500));
+    pushBot(BOT,String(d.reply||"mrrp :3").slice(0,8000));
   }catch(e){
     console.warn("cat-chat failed, using random reply:",e);
     drop();render();randomReply();
@@ -345,21 +350,22 @@ function send(text){
 }
 
 /* keyboard */
-const rows=["qwertyuiop","asdfghjkl","zxcvbnm"];
+const rows=["1234567890","qwertyuiop","asdfghjkl","zxcvbnm"];
 const kb=$("#keys");
 rows.forEach((r,i)=>{
   const d=document.createElement("div");d.className="row";
   [...r].forEach(c=>{const b=document.createElement("button");b.type="button";b.className="key";b.textContent=c;b.onclick=()=>type(c);d.appendChild(b)});
-  if(i===2){const b=document.createElement("button");b.type="button";b.className="key wide";b.textContent="⌫";b.setAttribute("aria-label","Backspace");b.onclick=back;d.appendChild(b)}
+  if(i===3){const b=document.createElement("button");b.type="button";b.className="key wide";b.textContent="⌫";b.setAttribute("aria-label","Backspace");b.onclick=back;d.appendChild(b)}
   kb.appendChild(d);
 });
 const last=document.createElement("div");last.className="row";
-[[":3","key cat",()=>type(":3")],["space","key space",()=>type(" ")],["send","key wide",()=>{feedback();send()}]].forEach(([t,c,f])=>{
+[[":3","key cat",()=>type(":3")],[":","key",()=>type(":")],["paste","key paste",async()=>{feedback();try{const t=await navigator.clipboard.readText();if(t){draft=(draft+t).slice(0,1500);tab="chat";render()}}catch(e){log.push(["system","paste blocked. Long-press the message box and choose Paste."]);tab="chat";render()}}],["space","key space",()=>type(" ")],["send","key wide",()=>{feedback();send()}]].forEach(([t,c,f])=>{
   const b=document.createElement("button");b.type="button";b.className=c;b.textContent=t;b.onclick=f;last.appendChild(b)});
 kb.appendChild(last);
 
 /* physical keyboard */
 addEventListener("keydown",e=>{
+  if(document.activeElement===out)return;
   if(e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|TEXTAREA|BUTTON)$/.test(document.activeElement.tagName)&&e.key!=="Enter"&&e.key!==" "&&e.key.length>1)return;
   if(document.activeElement.tagName==="BUTTON")return;
   if(e.key==="Backspace")back();
